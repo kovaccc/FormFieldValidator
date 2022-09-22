@@ -40,7 +40,7 @@ class ValidEmail extends ValidationType {
 
   @override
   bool isValid(String? inputValue) {
-    return EmailValidator.validate(inputValue!);
+    return inputValue == null ? false : EmailValidator.validate(inputValue);
   }
 }
 
@@ -51,7 +51,10 @@ class MinLength extends ValidationType {
 
   @override
   bool isValid(String? inputValue) {
-    return inputValue!.length > length;
+    if (inputValue == null && length <= 0) {
+      return true;
+    }
+    return inputValue == null ? false : inputValue.length >= length;
   }
 }
 
@@ -62,7 +65,10 @@ class MaxLength extends ValidationType {
 
   @override
   bool isValid(String? inputValue) {
-    return inputValue!.length < length;
+    if (inputValue == null && length >= 0) {
+      return true;
+    }
+    return inputValue == null ? false : inputValue.length <= length;
   }
 }
 
@@ -73,7 +79,7 @@ class Regex extends ValidationType {
 
   @override
   bool isValid(String? inputValue) {
-    return RegExp(expression).hasMatch(inputValue!);
+    return inputValue == null ? false : RegExp(expression).hasMatch(inputValue);
   }
 }
 
