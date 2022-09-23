@@ -99,28 +99,8 @@ class ValidDateFormat extends ValidationType {
   }
 }
 
-enum Years {
-  three,
-  sixteen,
-  eighteen,
-}
-
-extension YearsExtension on Years {
-  int getYearsInMilliSeconds() {
-    int yearsInMillis = 0;
-    if (this == Years.three) {
-      yearsInMillis = 94670856000;
-    } else if (this == Years.sixteen) {
-      yearsInMillis = 504911232000;
-    } else if (this == Years.eighteen) {
-      yearsInMillis = 568025136000;
-    }
-    return yearsInMillis;
-  }
-}
-
 class ValidBirthDate extends ValidationType {
-  final Years minYears;
+  final int minYears;
   final String dateFormat;
 
   ValidBirthDate(this.minYears, this.dateFormat, super.errorMessage);
@@ -132,7 +112,8 @@ class ValidBirthDate extends ValidationType {
       final dateInMillis =
           DateFormat(dateFormat).parse(inputValue!).millisecondsSinceEpoch;
       final currentTime = DateTime.now().millisecondsSinceEpoch;
-      if (currentTime - dateInMillis < minYears.getYearsInMilliSeconds()) {
+      final yearDifference = (currentTime - dateInMillis) / 31556952000;
+      if (yearDifference < minYears) {
         isValid = false;
       }
     } catch (e) {

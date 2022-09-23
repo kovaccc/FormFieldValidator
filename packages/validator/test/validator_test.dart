@@ -262,22 +262,27 @@ void main() {
   });
 
   group('ValidBirthDate test', () {
-    const String errorText = "You are too young";
-
-    test(
-        'calling validate with date that is greater than allowed limit will return $errorText',
-        () {
+    const errorText = "You are too young";
+    test('calling validate with too young date should return $errorText', () {
       expect(
           errorText,
-          Validator.validate("12/03/2008",
-              [ValidBirthDate(Years.sixteen, "dd/MM/yyyy", errorText)]));
+          Validator.validate(
+              "12/03/2008", [ValidBirthDate(16, "dd/MM/yyyy", errorText)]));
     });
 
     test('calling validate with date that is allowed will return null', () {
       expect(
           null,
-          Validator.validate("12/03/2006",
-              [ValidBirthDate(Years.sixteen, "dd/MM/yyyy", errorText)]));
+          Validator.validate(
+              "12/03/2006", [ValidBirthDate(16, "dd/MM/yyyy", errorText)]));
+    });
+
+    test('calling validate with edge date that is allowed will return null',
+        () {
+      expect(
+          null,
+          Validator.validate(
+              "23/09/2006", [ValidBirthDate(16, "dd/MM/yyyy", errorText)]));
     });
 
     test(
@@ -285,8 +290,8 @@ void main() {
         () {
       expect(
           "Invalid date format",
-          Validator.validate("12.03.2006",
-              [ValidBirthDate(Years.sixteen, "dd/MM/yyyy", errorText)]));
+          Validator.validate(
+              "12.03.2006", [ValidBirthDate(16, "dd/MM/yyyy", errorText)]));
     });
   });
 
